@@ -3,7 +3,7 @@ import { GoogleGenAI } from "@google/genai";
 export const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY! });
 
 export const generateGoogleImage = async ({
-  prompt = "Convert this drawing into a realistic image",
+  prompt = "Transform this sketch into a high-resolution, ultra-realistic photo, with natural lighting, real-world textures, and photographic details.",
   image,
 }: {
   prompt?: string;
@@ -29,6 +29,7 @@ export const generateGoogleImage = async ({
     contents,
     config: {
       responseModalities: ["Text", "Image"],
+      temperature: 0.75,
     },
   });
 
