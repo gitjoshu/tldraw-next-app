@@ -8,13 +8,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { toast } from "sonner";
 
 export function DialogDemo({ action }: { action: () => Promise<void> }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="destructive">Delete Drawing</Button>
+        <Button size="sm" variant="destructive">Delete Drawing</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -31,7 +30,6 @@ export function DialogDemo({ action }: { action: () => Promise<void> }) {
             variant="destructive"
             onClick={async () => {
               await action();
-              toast.success("Drawing deleted successfully");
             }}
           >
             Delete drawing

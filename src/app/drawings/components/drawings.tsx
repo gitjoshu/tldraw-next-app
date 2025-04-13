@@ -9,8 +9,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { connection } from 'next/server'
 
 export const Drawings = async () => {
+  await connection();
   const snapshots = await trpc.snapshot.getAllSnapshots();
 
   return (

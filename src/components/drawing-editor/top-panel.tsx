@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { trpc } from "@/tprc/client";
 import { getSnapshot, useEditor } from "tldraw";
@@ -12,21 +12,12 @@ export const TopPanel = ({ hasSnapshot }: { hasSnapshot: boolean }) => {
 
   const editor = useEditor();
 
-  const {
-    mutateAsync: updateSnapshot,
-    error: updateSnapshotError,
-    isPending: isUpdatingSnapshot,
-  } = trpc.snapshot.updateSnapshot.useMutation();
-  const {
-    mutateAsync: createSnapshot,
-    error: createSnapshotError,
-    isPending: isCreatingSnapshot,
-  } = trpc.snapshot.createSnapshot.useMutation();
-  const {
-    mutateAsync: deleteSnapshot,
-    error: deleteSnapshotError,
-    isPending: isDeletingSnapshot,
-  } = trpc.snapshot.deleteSnapshot.useMutation();
+  const { mutateAsync: updateSnapshot, isPending: isUpdatingSnapshot } =
+    trpc.snapshot.updateSnapshot.useMutation();
+  const { mutateAsync: createSnapshot, isPending: isCreatingSnapshot } =
+    trpc.snapshot.createSnapshot.useMutation();
+  const { mutateAsync: deleteSnapshot, isPending: isDeletingSnapshot } =
+    trpc.snapshot.deleteSnapshot.useMutation();
 
   const { mutateAsync: generateImageMutate, isPending: isGeneratingImage } =
     trpc.snapshot.generateImage.useMutation();
@@ -76,21 +67,40 @@ export const TopPanel = ({ hasSnapshot }: { hasSnapshot: boolean }) => {
   const handleSnapshot = useCallback(async () => {
     const { document, session } = getSnapshot(editor.store);
     if (snapshotExists) {
-      await updateSnapshot({
+      const promise = updateSnapshot({
         id: Number(id),
         document,
         session,
       });
-      toast.success("Drawing saved successfully");
-      return;
+      toast.promise(promise, {
+        loading: "Saving drawing...",
+        success: "Drawing saved successfully!",
+        error: (err: unknown) => {
+          if (err instanceof Error) {
+            return err.message;
+          }
+          return "Failed to save drawing";
+        },
+      });
+    } else {
+      const promise = createSnapshot({
+        document,
+        session,
+      });
+      toast.promise(promise, {
+        loading: "Creating drawing...",
+        success: ({ id: newSnapshotId }) => {
+          router.push(`/drawings/${newSnapshotId}`);
+          return "Drawing created successfully!";
+        },
+        error: (err: unknown) => {
+          if (err instanceof Error) {
+            return err.message;
+          }
+          return "Failed to create drawing";
+        },
+      });
     }
-
-    const { id: newSnapshotId } = await createSnapshot({
-      document,
-      session,
-    });
-    toast.success("Drawing created successfully");
-    router.push(`/drawings/${newSnapshotId}`);
   }, [
     createSnapshot,
     editor.store,
@@ -101,29 +111,24 @@ export const TopPanel = ({ hasSnapshot }: { hasSnapshot: boolean }) => {
   ]);
 
   const handleDeleteSnapshot = useCallback(async () => {
-    await deleteSnapshot({
+    const promise = deleteSnapshot({
       id: Number(id),
     });
-    router.push("/drawings");
+
+    toast.promise(promise, {
+      loading: "Deleting drawing...",
+      success: () => {
+        router.push("/drawings");
+        return "Drawing deleted successfully!";
+      },
+      error: (err: unknown) => {
+        if (err instanceof Error) {
+          return err.message;
+        }
+        return "Failed to delete drawing";
+      },
+    });
   }, [deleteSnapshot, id, router]);
-
-  useEffect(() => {
-    if (updateSnapshotError) {
-      toast.error(updateSnapshotError.message);
-    }
-  }, [updateSnapshotError]);
-
-  useEffect(() => {
-    if (createSnapshotError) {
-      toast.error(createSnapshotError.message);
-    }
-  }, [createSnapshotError]);
-
-  useEffect(() => {
-    if (deleteSnapshotError) {
-      toast.error(deleteSnapshotError.message);
-    }
-  }, [deleteSnapshotError]);
 
   const isUpdating =
     isUpdatingSnapshot ||
