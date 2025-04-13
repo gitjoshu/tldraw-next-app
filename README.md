@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# tldraw-next-app
 
-## Getting Started
+Este proyecto es una aplicación web construida con Next.js que integra la pizarra colaborativa tldraw.
 
-First, run the development server:
+## Índice
+
+- [Instrucciones de Configuración](#instrucciones-de-configuración)
+- [Cómo Ejecutar la Aplicación](#cómo-ejecutar-la-aplicación)
+- [Tecnologías de Implementación](#tecnologías-de-implementación)
+- [Descripción de Funcionalidades](#descripción-de-funcionalidades)
+
+## Instrucciones de Configuración
+
+1.  **Clonar el repositorio:**
+    ```bash
+    git clone <URL_DEL_REPOSITORIO>
+    cd tldraw-next-app
+    ```
+
+2.  **Instalar dependencias:**
+    Utiliza el siguiente comando:
+    ```bash
+    npm install
+    ```
+
+3.  **Configurar variables de entorno:**
+    Crea un archivo `.env` en la raíz del proyecto y añade las variables necesarias. Como mínimo, necesitarás la URL de conexión a tu base de datos de postgress y el api token de replicate para la generación de imágenes mediante IA:
+    ```dotenv
+    DATABASE_URL="postgresql://..."
+    REPLICATE_API_TOKEN="r8_1D..."
+    ```
+
+4.  **Sincronizar la base de datos:**
+    Este proyecto usa Drizzle ORM. Ejecuta el siguiente comando para aplicar las migraciones o empujar el esquema a tu base de datos:
+    ```bash
+    npm run db:push
+    ```
+    *Nota: Si prefieres gestionar los cambios de la base de datos mediante migraciones, puedes usar `npm run db:generate`. Este comando utiliza `drizzle-kit` para generar archivos SQL de migración basados en los cambios detectados en tu esquema ORM. Una vez generados, deberás aplicar estas migraciones manualmente o mediante otra herramienta.*
+
+## Cómo Ejecutar la Aplicación
+
+Una vez completada la configuración, puedes iniciar el servidor de desarrollo:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador para ver la aplicación en funcionamiento. La aplicación utiliza Turbopack para un desarrollo más rápido.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tecnologías de Implementación
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Este proyecto utiliza una variedad de tecnologías modernas:
 
-## Learn More
+-   **Framework:** [Next.js](https://nextjs.org/) (v15+)
+-   **Lenguaje:** [TypeScript](https://www.typescriptlang.org/)
+-   **UI:**
+    -   [React](https://reactjs.org/) (v19)
+    -   [Tailwind CSS](https://tailwindcss.com/) (v4) - CSS
+    -   [tldraw](https://tldraw.dev/) (v3+) - Componente principal de pizarra.
+    -   [Shadcn](https://ui.shadcn.com/) - Componentes de UI
+-   **API:** [tRPC](https://trpc.io/) (v11) - API typesafe end-to-end.
+-   **Base de Datos:**
+    -   [Neon](https://neon.tech/) - Base de datos PostgreSQL serverless.
+    -   [Drizzle ORM](https://orm.drizzle.team/) - ORM para TypeScript.
+-   **Otros:**
+    -   [ESLint](https://eslint.org/) - Linting.
+    -   [GOOGLE-GEMINI](https://ai.google.dev/gemini-api/docs/image-generation) - Generación de imágenes mediante IA.
+    -   `dotenv` - Gestión de variables de entorno.
 
-To learn more about Next.js, take a look at the following resources:
+## Descripción de Funcionalidades
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+La aplicación ofrece una experiencia completa de dibujo digital con características avanzadas:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Funcionalidades Principales de Dibujo:**
 
-## Deploy on Vercel
+*   **Pizarra Digital Interactiva:** Utiliza `tldraw` para crear, modificar y gestionar dibujos.
+*   **Gestión de Dibujos:**
+    *   Crear nuevos dibujos desde cero.
+    *   Guardar el estado actual del dibujo en la base de datos.
+    *   Borrar dibujos existentes (con confirmación mediante un modal).
+*   **Persistencia de Datos:** Los dibujos se guardan en una base de datos PostgreSQL (Neon) mediante Drizzle ORM.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Integración con Inteligencia Artificial:**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+*   **Generación de Imágenes por IA:** Transforma tus dibujos en imágenes utilizando modelos de IA (integración con Google AI / Replicate).
+*   **Visualización:** Página dedicada para mostrar la imagen generada por la IA.
+
+**Interfaz de Usuario y Experiencia:**
+
+*   **Landing Page:** Página de inicio con transiciones visuales (`View Transitions`) al explorar.
+*   **Listado de Dibujos:** Muestra los dibujos guardados con fecha de actualización, botones para abrir o crear nuevos, y acceso a página de error.
+*   **Carga Asíncrona:** Uso de `Suspense` y `Skeleton` para una carga fluida de datos del servidor.
+*   **Notificaciones:** Feedback al usuario sobre éxitos y errores mediante `shadcn/sonner`.
+*   **Manejo de Estados:** Gestión del estado de las peticiones para controlar la interactividad (ej. deshabilitar botones).
+*   **Temas:** Soporte básico para modo claro y oscuro.
+
+**Manejo de Errores:**
+
+*   **Página de Error Dedicada:** Página específica para mostrar errores con opciones para reintentar o volver al inicio.
+*   **Control de Errores:** Gestión robusta de errores tanto en el cliente como en el servidor.
+
+**Tecnología Subyacente (Resumen):**
+
+*   Desarrollado con Next.js 15 y TypeScript.
+*   Diseño implementado con Tailwind CSS y componentes de Shadcn UI.
+*   API typesafe construida con tRPC (configurada para cliente y React Server Components).
+*   Base de datos gestionada con Drizzle ORM.

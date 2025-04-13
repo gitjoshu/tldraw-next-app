@@ -1,0 +1,1 @@
+ALTER TABLE "snapshot" ALTER COLUMN "id" SET DATA TYPE serial;
