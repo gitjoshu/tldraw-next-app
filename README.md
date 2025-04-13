@@ -27,7 +27,7 @@ Este proyecto es una aplicación web construida con Next.js que integra la pizar
     Crea un archivo `.env` en la raíz del proyecto y añade las variables necesarias. Como mínimo, necesitarás la URL de conexión a tu base de datos de postgress y el api token de replicate para la generación de imágenes mediante IA:
     ```dotenv
     DATABASE_URL="postgresql://..."
-    REPLICATE_API_TOKEN="r8_1D..."
+    AIzaSy="AIzaSy..."
     ```
 
 4.  **Sincronizar la base de datos:**
