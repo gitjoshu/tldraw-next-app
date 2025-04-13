@@ -137,7 +137,7 @@ export const TopPanel = ({ hasSnapshot }: { hasSnapshot: boolean }) => {
     isGeneratingImage;
 
   return (
-    <div className="pointer-events-auto flex gap-2 p-2">
+    <div className="pointer-events-auto flex flex-col sm:flex-row gap-2 p-2">
       <Button
         onClick={() => {
           handleSnapshot();
