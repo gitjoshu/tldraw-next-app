@@ -18,18 +18,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body className="min-h-screen flex flex-col">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
-          <main className="container max-w-screen-lg mx-auto py-8 px-2 lg:px-0 h-full">
-            {children}
-          </main>
-          <Footer />
+          <div className="flex flex-col flex-grow">
+            <Navbar />
+            <main className="container max-w-screen-lg mx-auto py-8 px-2 lg:px-0 flex-grow">
+              {children}
+            </main>
+            <Footer />
+          </div>
           <Toaster position="top-center" />
         </ThemeProvider>
       </body>
