@@ -18,7 +18,7 @@ Este proyecto es una aplicación web construida con Next.js que integra la pizar
     ```
 
 2.  **Instalar dependencias:**
-    Utiliza el siguiente comando:
+    Utiliza el siguiente comando con la versión de node `22.14.0`
     ```bash
     npm install
     ```
