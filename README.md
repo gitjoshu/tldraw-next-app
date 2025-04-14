@@ -24,10 +24,10 @@ Este proyecto es una aplicación web construida con Next.js que integra la pizar
     ```
 
 3.  **Configurar variables de entorno:**
-    Crea un archivo `.env` en la raíz del proyecto y añade las variables necesarias. Como mínimo, necesitarás la URL de conexión a tu base de datos de postgress y el api token de replicate para la generación de imágenes mediante IA:
+    Crea un archivo `.env` en la raíz del proyecto y añade las variables necesarias. Como mínimo, necesitarás la URL de conexión a tu base de datos de postgress y el api token de google para la generación de imágenes mediante IA:
     ```dotenv
     DATABASE_URL="postgresql://..."
-    AIzaSy="AIzaSy..."
+    GOOGLE_API_KEY="AIzaSy..."
     ```
 
 4.  **Sincronizar la base de datos:**
@@ -82,7 +82,7 @@ La aplicación ofrece una experiencia completa de dibujo digital con caracterís
 
 **Integración con Inteligencia Artificial:**
 
-*   **Generación de Imágenes por IA:** Transforma tus dibujos en imágenes utilizando modelos de IA (integración con Google AI / Replicate).
+*   **Generación de Imágenes por IA:** Transforma tus dibujos en imágenes utilizando modelos de IA (integración con Google AI).
 *   **Visualización:** Página dedicada para mostrar la imagen generada por la IA.
 
 **Interfaz de Usuario y Experiencia:**
