@@ -13,7 +13,7 @@ Este proyecto es una aplicación web construida con Next.js que integra la pizar
 
 1.  **Clonar el repositorio:**
     ```bash
-    git clone <URL_DEL_REPOSITORIO>
+    git clone https://github.com/gitjoshu/tldraw-next-app.git
     cd tldraw-next-app
     ```
 
